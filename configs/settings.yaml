@@ -1,0 +1,13 @@
+database1:
+  driver: mysql
+  #source: root:lcc_cn2580946@tcp(39.107.141.185:3306)/seckill?charset=utf8&loc=Asia%2FShanghai&parseTime=true
+  source: root:root@tcp(127.0.0.1:3306)/seckill?charset=utf8&loc=Asia%2FShanghai&parseTime=true #parseTime=true => 不配置go time.Time无法解析Mysql的datatime时间
+
+redis:
+  addr: 39.107.141.185:6379
+  db: 0
+  poolsize: 40
+  min-idle-conns: 10
+
+web:
+  post: :9090

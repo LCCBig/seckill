@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>商品列表</title>
+    <!-- jquery -->
+    <script type="text/javascript" src="/static/js/jquery.min.js"></script>
+    <!-- bootstrap -->
+    <link rel="stylesheet" type="text/css" href="../static/bootstrap/css/bootstrap.min.css"/>
+    <script type="text/javascript" src="../static/bootstrap/js/bootstrap.min.js"></script>
+    <!-- layer -->
+    <script type="text/javascript" src="../static/layer/layer.js"></script>
+    <!-- common.js -->
+    <script type="text/javascript" src="../static/js/common.js"></script>
+</head>
+<body>
+<div class="panel panel-default">
+    <div class="panel-heading">秒杀商品列表</div>
+    <table class="table" id="goodslist">
+        <tr>
+            <td>商品名称</td>
+            <td>商品图片</td>
+            <td>商品原价</td>
+            <td>秒杀价</td>
+            <td>库存数量</td>
+            <td>详情</td>
+        </tr>
+        {{range .goodsList}}
+        <tr>
+            <td>{{.GoodName}}</td>
+            <td><img src="/static/img/{{.GoodImg}}" width="100" height="100"/></td>
+            <td>{{.GoodPrice}}</td>
+            <td>{{.SecKillPrice}}</td>
+            <td>{{.StockCount}}</td>
+{{/*            <td><a href="'/goodsDetail.htm?goodsId='+{{.Id}}">详情</a></td>*/}}
+            <
+            <td>
+{{/*                <form id="secKillForm" method="post" action="/seckill/doSeckill">*/}}
+{{/*                    <input type="hidden" name="goodsId" value="{{ .goods.Id}}">*/}}
+{{/*                    <button class="btn btn-primary btn-block" type="submit" id="buyButton">详情</button>*/}}
+{{/*                </form>*/}}
+                <a href="/goods/toDetail/{{.SecKillId}}">详情</a></td>
+        </tr>
+        {{end}}
+    </table>
+</div>
+</body>
+</html>
