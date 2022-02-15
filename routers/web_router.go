@@ -30,5 +30,6 @@ func Init(router *gin.Engine) {
 		goodGroup.GET("/toList", good.ToList)
 		goodGroup.GET("/toDetail", good.ToDetail)
 		goodGroup.POST("/detailInfo", good.GoodDetailInfo)
+		goodGroup.POST("/seckill", good.DoSecKill)
 	}
 }

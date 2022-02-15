@@ -1,6 +1,7 @@
 package models
 
 import (
+	"database/sql"
 	"github.com/jmoiron/sqlx"
 	"github.com/shopspring/decimal"
 	"time"
@@ -53,4 +54,13 @@ func (secKill *SecKillGood) GetSecKillGoodList(db *sqlx.DB) *[]SecKillGood {
 		goodList = append(goodList, goodItem)
 	}
 	return &goodList
+}
+
+/**
+减库存操作
+*/
+
+func (secKill *SecKillGood) SaleOne(tx *sqlx.Tx) *sql.Result {
+	result := tx.MustExec("UPDATE t_seckill_goods SET stock_count = stock_count - 1 WHERE good_id = ? AND stock_count - 1 >= 0", secKill.Id)
+	return &result
 }

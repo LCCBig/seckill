@@ -9,5 +9,8 @@ redis:
   poolsize: 40
   min-idle-conns: 10
 
+rabbitmq:
+  addr: amqp://guest:guest@39.107.141.185:5672/my_vhost #连接信息amqp://kuteng:kuteng@127.0.0.1:5672/kuteng 这个信息是固定不变的amqp://事固定参数后面两个是用户名密码ip地址端口号Virtual Host
+
 web:
   post: :9090

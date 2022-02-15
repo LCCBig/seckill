@@ -22,13 +22,17 @@ type Good struct {
 	GoodStock int `json:"goodStock"   db:"good_stock"`
 }
 
-func (good *Good) GetGoodById(id int, db *sqlx.DB) {
-	row := db.QueryRow("select id,good_name,good_title,good_img,good_detail,good_price,good_stock from t_good where id = ?", id)
+func (good *Good) GetGoodById(db *sqlx.DB) bool {
+	row := db.QueryRow("select id,good_name,good_title,good_img,good_detail,good_price,good_stock from t_good where id = ?", good.Id)
+	if row.Err() != nil {
+		return false
+	}
 	err := row.Scan(&good.Id, &good.GoodName, &good.GoodTitle, &good.GoodImg, &good.GoodDetail, &good.GoodPrice, &good.GoodStock)
 
 	if err != nil {
-		print(err)
+		return false
 	}
+	return true
 }
 
 /**

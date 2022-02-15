@@ -16,8 +16,8 @@ http://www.lsdcloud.com/go/middleware/go-redis.html#_3-1-redis-options%E5%8F%82%
 */
 func IntiRedisClient(ctx context.Context) {
 	redisClient = redis.NewClient(&redis.Options{
-		//// 网络类型 tcp 或者 unix.
-		//	// 默认是 tcp.
+		//网络类型 tcp 或者 unix.
+		//默认是 tcp.
 		Network: "",
 		//redis地址，格式 host:port
 		Addr:   viper.GetString("redis.addr"),

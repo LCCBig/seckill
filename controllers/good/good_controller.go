@@ -18,6 +18,7 @@ func ToList(ctx *gin.Context) {
 	if !exists {
 		//如果用户未登陆或登陆状态过期，则重定向到登陆界面
 		ctx.Redirect(http.StatusTemporaryRedirect, "/home/tologin")
+		return
 	}
 	goodsList := services.GetGoodList()
 	ctx.HTML(http.StatusOK, "goodList.tmpl", gin.H{"goodsList": goodsList})
@@ -32,6 +33,7 @@ func ToDetail(ctx *gin.Context) {
 	if !exists {
 		//如果用户未登陆或登陆状态过期，则重定向到登陆界面
 		ctx.Redirect(http.StatusTemporaryRedirect, "/home/tologin")
+		return
 	}
 	idStirng := ctx.Param("secKillId")
 	secKillId, err := strconv.Atoi(idStirng)
@@ -80,7 +82,7 @@ func GoodDetailInfo(ctx *gin.Context) {
 	secKillId, err := strconv.Atoi(idStirng)
 	if err != nil {
 		//参数出错
-		print(err)
+		panic(err)
 	}
 	goodVo := services.GetGood(secKillId)
 
@@ -118,25 +120,31 @@ func GoodDetailInfo(ctx *gin.Context) {
 	controllers.Response(ctx, http.StatusOK, "查询成功", dataMap)
 }
 
+/**
+优化前：134
+优化后：
+*/
 func DoSecKill(ctx *gin.Context) {
 	//获取用户
 	userInterFace, exists := ctx.Get("user")
 	if !exists {
 		//如果用户未登陆或登陆状态过期，则重定向到登陆界面
 		ctx.Redirect(http.StatusTemporaryRedirect, "/home/tologin")
+		return
 	}
 	//goodsId
-	idStirng := ctx.Param("secKillId")
+	idStirng := ctx.PostForm("secKillId")
 	secKillId, err := strconv.Atoi(idStirng)
 	if err != nil {
 		//参数出错
-		print(err)
+		panic(err)
 	}
 
 	//判断库存是否充足
 	secKillGood := services.GetSecKillGoodByid(secKillId)
 	if secKillGood.StockCount < 1 {
 		controllers.Response(ctx, 500500, "库存不足", nil)
+		return
 	}
 
 	//判断是否重复抢购
@@ -147,8 +155,17 @@ func DoSecKill(ctx *gin.Context) {
 	secKillOrderCache := services.GetSecKillOrderCache(user.UserId, secKillId)
 	if secKillOrderCache != nil {
 		controllers.Response(ctx, 500501, "该商品每人限购一件", nil)
+		return
 	}
 
 	//进行秒杀
-
+	order := services.SecKill(&user, secKillGood)
+	if order == nil {
+		controllers.Response(ctx, 500, "服务端异常", nil)
+		return
+	}
+	var dataMap map[string]interface{}
+	dataMap = make(map[string]interface{})
+	dataMap["order"] = order
+	controllers.Response(ctx, http.StatusOK, "秒杀成功", dataMap)
 }

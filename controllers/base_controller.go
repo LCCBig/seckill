@@ -19,5 +19,4 @@ func Response(c *gin.Context, code uint32, msg string, data map[string]interface
 	c.Set("content-type", "application/json")                                                                                                                                                              // 设置返回格式是json
 
 	c.JSON(http.StatusOK, message)
-	return
 }

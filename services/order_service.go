@@ -11,7 +11,7 @@ import (
 /**
 通过用户ID和商品ID获取秒杀记录缓存
 */
-func GetSecKillOrderCache(goodIduserId int, goodId int) *models.SecKillGood {
+func GetSecKillOrderCache(userId int, goodId int) *models.SecKillGood {
 	//获取redis连接
 	redisClinet := dbs.GetRedisClinet()
 
