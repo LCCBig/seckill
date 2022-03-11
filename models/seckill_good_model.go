@@ -17,35 +17,36 @@ type SecKillGood struct {
 	//库存数量
 	StockCount int `json:"stockCount"      db:"stock_count"`
 	//秒杀开始时间
-	StartDate time.Time `json:"startDate"       db:"start_data"`
+	StartDate time.Time `json:"startDate"       db:"start_date"`
 	//秒杀结束时间
-	EndDate time.Time `json:"endDate"         db:"end_data"`
+	EndDate time.Time `json:"endDate"         db:"end_date"`
 }
 
 /**
-根据ID获取秒杀上屏
+根据ID获取秒杀商品
 */
 func (secKill *SecKillGood) GetSecKillGood(id int, db *sqlx.DB) {
 	row := db.QueryRow("select id,good_id,seckill_price,stock_count,start_date,end_date from t_seckill_goods where id = ?", id)
 	err := row.Scan(&secKill.Id, &secKill.GoodId, &secKill.SecKillPrice, &secKill.StockCount, &secKill.StartDate, &secKill.EndDate)
 
 	if err != nil {
-		print(err)
+		panic(err)
 	}
 }
 
 /**
-获取秒杀商品列表
+获取未过期的秒杀商品列表
 */
 func (secKill *SecKillGood) GetSecKillGoodList(db *sqlx.DB) *[]SecKillGood {
 	var goodList []SecKillGood
 	goodList = make([]SecKillGood, 0, 10)
-	query, err := db.Query("select id,good_id,seckill_price,stock_count,start_date,end_date from t_seckill_goods")
+	query, err := db.Query("SELECT id,good_id,seckill_price,stock_count,start_date,end_date FROM t_seckill_goods WHERE end_date > ?", time.Now().Format("2006-01-02 15:04:05"))
+	//err := db.Select(&goodList, "SELECT id,good_id,seckill_price,stock_count,start_date,end_date FROM t_seckill_goods WHERE end_date  > ?", "2022-02-17 11:26:40")
 
-	defer query.Close()
+	//defer query.Close()
 
 	if err != nil {
-		print(err)
+		panic(err)
 	}
 
 	for query.Next() {

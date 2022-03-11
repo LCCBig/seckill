@@ -52,7 +52,7 @@ func IntiRedisClient(ctx context.Context) {
 		PoolFIFO: false,
 		//redis连接池的最大连接数.
 		//默认连接池大小等于 cpu个数 * 10
-		PoolSize: 0,
+		PoolSize: viper.GetInt("redis.poolsize"),
 		//redis连接池最小空闲连接数.
 		MinIdleConns: viper.GetInt("redis.min-idle-conns"),
 		//redis连接最大的存活时间，默认不会关闭过时的连接.

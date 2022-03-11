@@ -3,7 +3,7 @@ package middleware
 import (
 	"context"
 	"github.com/gin-gonic/gin"
-	"github.com/json-iterator/go"
+	jsoniter "github.com/json-iterator/go"
 	"seckill/dbs"
 	"seckill/models"
 )
@@ -19,7 +19,7 @@ func GetUserByCookie() gin.HandlerFunc {
 	return func(ctx *gin.Context) {
 		userTicket, err := ctx.Cookie("userTicket")
 		if err != nil {
-			print(err)
+			panic(err)
 		}
 		//获取redis连接
 		redisClinet := dbs.GetRedisClinet()
@@ -32,6 +32,5 @@ func GetUserByCookie() gin.HandlerFunc {
 		var user models.User
 		jsoniter.Unmarshal([]byte(userJson.Val()), &user)
 		ctx.Set("user", user)
-
 	}
 }
